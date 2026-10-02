@@ -91,8 +91,15 @@ export const codingApi = {
 
 export const communicationApi = {
   getGDTopic: (sessionId: number) => api.get<GDTopic>(`/communication/session/${sessionId}/topic`),
+  transcribe: (file: FormData, language: string = 'en') =>
+    api.post('/communication/transcribe', file, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+      params: { language },
+    }),
   saveTranscript: (data: { question_id: number; transcript: string; audio_file_path?: string; duration_seconds?: number; language?: string; confidence?: number; segments?: any[] }) =>
     api.post('/communication/transcript', data),
+  evaluate: (questionId: number, transcriptId: number) =>
+    api.post('/communication/evaluate', { question_id: questionId, transcript_id: transcriptId }),
   getResults: (sessionId: number) => api.get(`/communication/session/${sessionId}/results`),
 };
 
@@ -109,6 +116,8 @@ export const reportsApi = {
   generate: (sessionId: number) => api.post(`/reports/session/${sessionId}/generate`),
   get: (sessionId: number) => api.get(`/reports/session/${sessionId}`),
   summary: (sessionId: number) => api.get<ReportSummary>(`/reports/session/${sessionId}/summary`),
+  exportPdf: (sessionId: number) => api.post(`/reports/session/${sessionId}/export/pdf`),
+  exportJson: (sessionId: number) => api.post(`/reports/session/${sessionId}/export/json`),
 };
 
 export const settingsApi = {

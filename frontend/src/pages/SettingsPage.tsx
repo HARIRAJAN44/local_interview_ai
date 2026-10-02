@@ -74,7 +74,8 @@ export function SettingsPage() {
     setGenerationResult(null);
     try {
       const response = await settingsApi.testOllamaGeneration(modelName);
-      setGenerationResult(`✅ Success!\n\nPrompt: ${response.prompt}\n\nResponse: ${response.response}`);
+      const data = response.data;
+      setGenerationResult(`✅ Success!\n\nPrompt: ${data.prompt}\n\nResponse: ${data.response}`);
       alert('Generation successful! Check result below.');
     } catch (error: any) {
       const msg = error.response?.data?.detail || error.message;
@@ -223,7 +224,7 @@ export function SettingsPage() {
                       </p>
                     </div>
                   </div>
-<div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2">
                     <button 
                       onClick={() => handleTestGeneration(model.name)} 
                       disabled={testingGeneration === model.name || pullingModel === model.name}
@@ -251,6 +252,23 @@ export function SettingsPage() {
                 </div>
               ))}
             </div>
+          </div>
+        </div>
+      )}
+
+      {generationResult && (
+        <div className="card">
+          <div className="card-header">
+            <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
+              <span className="text-green-600">✓</span>
+              Generation Result
+            </h2>
+          </div>
+          <div className="card-body">
+            <div className="bg-gray-100 p-4 rounded-lg font-mono text-sm whitespace-pre-wrap max-h-96 overflow-auto">
+              {generationResult}
+            </div>
+            <button onClick={() => setGenerationResult(null)} className="btn-ghost mt-2">Dismiss</button>
           </div>
         </div>
       )}
@@ -306,31 +324,12 @@ export function SettingsPage() {
                   <p className="text-sm text-yellow-700 mt-1">
                     Visit <a href="https://ollama.ai" target="_blank" rel="noopener" className="underline">ollama.ai</a> for installation instructions.
                   </p>
-</div>
-              ))}
+                </div>
+              ) }
             </div>
           </div>
         </div>
       )}
-
-      {generationResult && (
-        <div className="card">
-          <div className="card-header">
-            <h2 className="text-lg font-semibold text-gray-900 flex items-center gap-2">
-              <span className="text-green-600">✓</span>
-              Generation Result
-            </h2>
-          </div>
-          <div className="card-body">
-            <div className="bg-gray-100 p-4 rounded-lg font-mono text-sm whitespace-pre-wrap max-h-96 overflow-auto">
-              {generationResult}
-            </div>
-            <button onClick={() => setGenerationResult(null)} className="btn-ghost mt-2">Dismiss</button>
-          </div>
-        </div>
-      )}
-
-      {systemInfo && (
 
       {selectedProvider === 'openrouter' && openRouterModels.length > 0 && (
         <div className="card">
@@ -351,7 +350,7 @@ export function SettingsPage() {
             </div>
           </div>
         </div>
-      )}
+      ) }
     </div>
   );
 }

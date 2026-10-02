@@ -91,6 +91,7 @@ export interface AptitudeQuestion {
   difficulty: string;
   time_limit: number;
   order_index: number;
+  correct_answer: string;
 }
 
 export interface CodingQuestion {
